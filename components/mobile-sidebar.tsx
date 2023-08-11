@@ -4,8 +4,22 @@ import { Menu } from "lucide-react"
 import { Button } from "./ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import Sidebar from "./sidebar"
+import { useEffect, useState } from "react"
 
 const MobileSidebar = () => {
+//    3 step process to fix components having hydration error 
+
+// step-1 -> make the mounted state as false 
+    const [isMounted,setIsMounted]=useState(false)
+// step-2 -> set the mounted state true in useefect 
+    useEffect(()=>{
+        setIsMounted(true)
+    },[])
+// step-3->return null if there is no is mounted 
+    if(!isMounted){
+    return null;        
+    }
+
   return (
         <Sheet>
             {/* button contains toggle icon ->visible only in mobiles  */}
