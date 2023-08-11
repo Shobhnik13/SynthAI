@@ -43,7 +43,7 @@ const tools=[
   },
 
 ]
-const page = () => {
+const DashboardPage = () => {
   const router=useRouter()
   return (
     <div>
@@ -85,4 +85,4 @@ const page = () => {
   )
 }
 
-export default page
+export default DashboardPage
