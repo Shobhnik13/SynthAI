@@ -14,6 +14,9 @@ import { useState } from "react"
 import { ChatCompletionRequestMessage } from "openai"
 import Empty from "../../../../components/ui/empty"
 import LoaderComp from "../../../../components/ui/loadercomp"
+import { cn } from "../../../../lib/utils"
+import UserAva from "../../../../components/ui/user-ava"
+import BotAva from "../../../../components/ui/bot-ava"
 
 const ConversationPage = () => {
  
@@ -98,8 +101,11 @@ const ConversationPage = () => {
               {
                 messages && messages.map((item)=>(
                  
-                      <div key={item.content}>
-                          {item.content}
+                      <div 
+                      key={item.content}
+                      className={cn("p-8 w-full flex items-start gap-x-8 rounded-lg",item.role==='user' ?'bg-white border border-black/10':'bg-muted')}>
+                      {item.role==='user'?<UserAva/>:<BotAva/>}
+                      <p className="text-sm">{item.content}</p> 
                       </div>
                   
                 ))
