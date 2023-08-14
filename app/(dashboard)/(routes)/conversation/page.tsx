@@ -1,5 +1,5 @@
 'use client'
-import { MessageSquare } from "lucide-react"
+import { Loader, MessageSquare } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../../../../components/ui/form"
 import Heading from "../../../../components/heading"
 import { useForm } from 'react-hook-form'
@@ -7,7 +7,14 @@ import * as z from "zod"
 import { formSchema } from "./conversation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../../../../components/ui/input"
+import axios from 'axios'
 import { Button } from "../../../../components/ui/button"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { ChatCompletionRequestMessage } from "openai"
+import Empty from "../../../../components/ui/empty"
+import LoaderComp from "../../../../components/ui/loadercomp"
+
 const ConversationPage = () => {
  
   const form = useForm<z.infer<typeof formSchema>>({
@@ -18,9 +25,34 @@ const ConversationPage = () => {
   })
 
   const isLoading=form.formState.isSubmitting
-
+  const router=useRouter()
+  // messages -> Its an array that contains all the conversations bw user and system 
+  const [messages,setMessages]=useState<ChatCompletionRequestMessage[]>([])
   const onSubmit=async(values: z.infer<typeof formSchema>)=>{
-    console.log(values)
+    try{
+      // user message is also a type of ChatCompletionRequestMessage
+      const userMessage:ChatCompletionRequestMessage={
+        role:'user',
+        content:values.prompt,
+      }
+      // creating a new messages array which will store the prev messages of the user as well as the new message generated/provided by the user  
+      const newMessages=[...messages,userMessage]
+      //api call
+      const res=await axios.post('/api/conversation',{
+        messages:newMessages,
+      })
+      //now after sending the newMessages to the backend
+      //we got the response of the message sent by the user(prompt) 
+      //include the current message/prompt for which data is generated and its res came from backend
+      //and set into messages array
+      setMessages((curr)=> [...curr,userMessage, res.data])
+      //resetting the form
+      form.reset()
+    }catch(error: any){
+        console.log(error)
+    }finally{
+        router.refresh()
+    }
   }
   return (
     <div>
@@ -53,7 +85,27 @@ const ConversationPage = () => {
               </form>
             </Form>
           </div>
-          <div className="space-y-4 mt-4 text-green-600">Generated content:</div>
+          <div className="space-y-4 mt-4 ">
+            {isLoading && (
+              <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+                  <LoaderComp/>
+              </div>
+            )}
+            {messages.length === 0 && !isLoading && (
+              <div><Empty label="No conversation started yet!"/></div>
+            )}
+            <div className="flex flex-col-reverse text-green-600 gap-y-4">
+              {
+                messages && messages.map((item)=>(
+                 
+                      <div key={item.content}>
+                          {item.content}
+                      </div>
+                  
+                ))
+              }
+            </div>
+          </div>
         </div>
     </div>
   )
