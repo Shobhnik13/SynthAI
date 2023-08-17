@@ -1,5 +1,6 @@
 'use client'
-import { Image } from "lucide-react"
+import { Download, ImageIcon }  from "lucide-react"
+
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../../../../components/ui/form"
 import Heading from "../../../../components/heading"
 import { useForm } from 'react-hook-form'
@@ -19,6 +20,8 @@ import UserAva from "../../../../components/ui/user-ava"
 import BotAva from "../../../../components/ui/bot-ava"
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../../../../components/ui/select"
 import { SelectValue } from "@radix-ui/react-select"
+import { Card, CardFooter } from "../../../../components/ui/card"
+import Image from "next/image"
 
 const ImagePage = () => {
  
@@ -36,12 +39,16 @@ const ImagePage = () => {
   const router=useRouter()
   const onSubmit=async(values: z.infer<typeof formSchema>)=>{
     try{
+      // every time we complete a request to generate the response of an x prompt we need to delete that resonse/links from the array to proceed wit th next request  
+      //if we do not do this then at next request we will be generating the another images from prev requests as well
+      //so emptying the image array before proceeding with every other new Request
       setImages([])
-      console.log(values)
-    //   const res=await axios.post('/api/image',values)
-    //   const links=res.data.map((image:{url:string})=>image.url)
-    //   setImages(links)
-    //  form.reset()
+      // console.log(values)
+      const res=await axios.post('/api/image',values)
+      // console.log(res.data);
+      const links=res.data.map((image:{url:string})=>image.url)
+      setImages(links)
+     form.reset()
     }catch(error: any){
         console.log(error)
     }finally{
@@ -53,7 +60,7 @@ const ImagePage = () => {
         <Heading
         title='Image'
         description='Our most advanced image generation model'
-        icon={Image}
+        icon={ImageIcon}
         iconColor='text-pink-700'
         bgColor='bg-pink-700/10'/>
         
@@ -149,8 +156,21 @@ const ImagePage = () => {
             {images.length === 0 && !isLoading && (
               <div><Empty label="No conversation started yet!"/></div>
             )}
-            <div>
-              Images section
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
+              {images.map((item)=>(
+                <Card
+                key={item}
+                className="rounded-lg overflow-hidden">
+                    <div className="relarive aspect-square">
+                      <Image src={item} width={500} height={500} alt="image"/>
+                    </div>
+                    <CardFooter className="p-2">
+                      <Button variant="secondary" className="w-full" onClick={()=>window.open(item)} >
+                        <Download className="h-4 w-4 mr-2"/>
+                      </Button>
+                    </CardFooter>
+                </Card>
+              ))}
             </div>
           </div>
         </div>
