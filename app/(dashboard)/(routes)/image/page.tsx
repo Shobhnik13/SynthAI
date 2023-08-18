@@ -150,11 +150,11 @@ const ImagePage = () => {
           <div className="space-y-4 mt-4 ">
             {isLoading && (
               <div className="p-20 ">
-                  <LoaderComp purpose='images'/>
+                  <LoaderComp purpose='images' instruction=""/>
               </div>
             )}
             {images.length === 0 && !isLoading && (
-              <div><Empty label="No conversation started yet!"/></div>
+              <div><Empty label="No images generated yet!"/></div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
               {images.map((item)=>(

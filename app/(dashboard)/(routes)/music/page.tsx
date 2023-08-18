@@ -1,10 +1,10 @@
 'use client'
-import { Loader, MessageSquare } from "lucide-react"
+import { Loader, MessageSquare, Music2Icon, MusicIcon } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../../../../components/ui/form"
 import Heading from "../../../../components/heading"
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
-import { formSchema } from "./conversation"
+import { formSchema } from "./music"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../../../../components/ui/input"
 import axios from 'axios'
@@ -18,7 +18,7 @@ import { cn } from "../../../../lib/utils"
 import UserAva from "../../../../components/ui/user-ava"
 import BotAva from "../../../../components/ui/bot-ava"
 
-const ConversationPage = () => {
+const MusicPage = () => {
  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -29,27 +29,14 @@ const ConversationPage = () => {
 
   const isLoading=form.formState.isSubmitting
   const router=useRouter()
-  // messages -> Its an array that contains all the conversations bw user and system 
-  const [messages,setMessages]=useState<ChatCompletionRequestMessage[]>([])
+  // music -> Its a string(link)/currently undefined/empty
+  const [music,setMusic]=useState<string>()
   const onSubmit=async(values: z.infer<typeof formSchema>)=>{
     try{
-      // user message is also a type of ChatCompletionRequestMessage
-      const userMessage:ChatCompletionRequestMessage={
-        role:'user',
-        content:values.prompt,
-      }
-      // creating a new messages array which will store the prev messages of the user as well as the new message generated/provided by the user  
-      const newMessages=[...messages,userMessage]
+        setMusic(undefined)
       //api call
-      const res=await axios.post('/api/conversation',{
-        messages:newMessages,
-      })
-      //now after sending the newMessages to the backend
-      //we got the response of the message sent by the user(prompt) 
-      //include the current message/prompt for which data is generated and its res came from backend
-      //and set into messages array
-      setMessages((curr)=> [...curr,userMessage, res.data])
-      //resetting the form
+      const res=await axios.post('/api/music',values)
+      setMusic(res.data.audio)
       form.reset()
     }catch(error: any){
         console.log(error)
@@ -60,11 +47,11 @@ const ConversationPage = () => {
   return (
     <div>
         <Heading
-        title='Conversation'
-        description='Our most advanced conversation model'
-        icon={MessageSquare}
-        iconColor='text-violet-500'
-        bgColor='bg-violet-500/10'/>
+        title='Music'
+        description='Our most advanced music generation model'
+        icon={MusicIcon}
+        iconColor='text-emerald-500'
+        bgColor='bg-emerald-500/10'/>
         
         {/* form  */}
 
@@ -80,7 +67,7 @@ const ConversationPage = () => {
                 render={({ field }) => (
                   <FormItem className="col-span-12 lg:col-span-10">
                         <FormControl >
-                          <Input placeholder="Enter a prompt" disabled={isLoading} className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent" {...field} />
+                          <Input placeholder="Convert your prompt into music" disabled={isLoading} className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent" {...field} />
                         </FormControl>
                   </FormItem>
                 )}/>
@@ -91,30 +78,21 @@ const ConversationPage = () => {
           <div className="space-y-4 mt-4 ">
             {isLoading && (
               <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
-                  <LoaderComp purpose='answers' instruction=""/>
+                  <LoaderComp purpose='music' instruction='It may take upto 3-5 minutes!'/>
               </div>
             )}
-            {messages.length === 0 && !isLoading && (
-              <div><Empty label="No conversation started yet!"/></div>
+            {!music && !isLoading && (
+              <div><Empty label="No music started yet!"/></div>
             )}
-            <div className="flex flex-col-reverse text-green-600 gap-y-4">
-              {
-                messages && messages.map((item)=>(
-                 
-                      <div 
-                      key={item.content}
-                      className={cn("p-8 w-full flex items-start gap-x-8 rounded-lg",item.role==='user' ?'bg-white border border-black/10':'bg-muted')}>
-                      {item.role==='user'?<UserAva/>:<BotAva/>}
-                      <p className="text-sm">{item.content}</p> 
-                      </div>
-                  
-                ))
-              }
-            </div>
+           <div>
+                {music && <audio controls className="w-full mt-8">
+                    <source src={music}/>
+                </audio>}
+           </div>
           </div>
         </div>
     </div>
   )
 }
 
-export default ConversationPage
+export default MusicPage
