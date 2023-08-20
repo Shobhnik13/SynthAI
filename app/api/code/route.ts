@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import  { Configuration, OpenAIApi } from "openai" ;
+import { checkApiLimit, incApiLimit } from "../../constants/api-limit";
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
@@ -23,12 +24,16 @@ export async function POST(req:Request){
             if(!messages){
                     return new NextResponse('Messages are required!',{status:400})
             }
-
+            const freeTrial=await checkApiLimit()
+            if(!freeTrial){
+                return new NextResponse('Your free trial is expired!',{status:403})
+            }
             // returning response 
             const res = await openai.createChatCompletion({
                 model: "gpt-3.5-turbo",
                 messages:[{"role":"system", "content":"You are a code generator.You must answer only in markdown code snippets.Use code comments for explaining code."},...messages]
             });
+            await incApiLimit()
             return NextResponse.json(res.data.choices[0].message)
     }catch(error){
         console.log('Code error!',error)

@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import  { Configuration, OpenAIApi } from "openai" ;
+import { checkApiLimit, incApiLimit } from "../../constants/api-limit";
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
@@ -29,14 +30,19 @@ export async function POST(req:Request){
             if(!resolution){
                 return new NextResponse('resolution is required',{status:400})
             }
-
+            const freeTrial=await checkApiLimit()
+            if(!freeTrial){
+                return new NextResponse('Your free trial is expired!',{status:403})
+            }
+            
             // returning response 
             const res = await openai.createImage({
-            prompt:prompt,
-            // parseInt will take a string as a no and return an integer by using a radix parseInt(string,radix) ->parseint(amount,10)
-            n:parseInt(amount,10),
-            size:resolution,
+                prompt:prompt,
+                // parseInt will take a string as a no and return an integer by using a radix parseInt(string,radix) ->parseint(amount,10)
+                n:parseInt(amount,10),
+                size:resolution,
             });
+            await incApiLimit()
             return NextResponse.json(res.data.data)
     }catch(error){
         console.log('Image error!',error)
