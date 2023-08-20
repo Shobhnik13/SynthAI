@@ -49,24 +49,24 @@ export const checkApiLimit=async()=>{
     }
 }
 
-// export const getApiLimit=async()=>{
-//     const {userId}=auth()
+export const getApiLimit=async()=>{
+    const {userId}=auth()
     
-//     if(!userId){
-//         return 0;
-//     }
-//     const userApiLimit=await prismadb.userApiLimit.findUnique({
-//         where:{
-//             userId,
-//         }
-//     })
-//     //user never made any generation
-//     //so he has all tokens
-//     //return the current count as 0
-//     if(!userApiLimit){
-//         return 0;
-//     }
-//     //else return the current count as
-//     //userapilimit.count
-//    return userApiLimit.count
-// }
+    if(!userId){
+        return 0;
+    }
+    const userApiLimit=await prismadb.userApiLimit.findUnique({
+        where:{
+            userId,
+        }
+    })
+    //user never made any generation
+    //so he has all tokens
+    //return the current count as 0
+    if(!userApiLimit){
+        return 0;
+    }
+    //else return the current count as
+    //userapilimit.count
+   return userApiLimit.count
+}

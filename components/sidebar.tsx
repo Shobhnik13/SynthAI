@@ -51,8 +51,10 @@ const routes=[
     href:'/settings',
   },
 ]
-
-const Sidebar = () => {
+interface SidebarProps{
+  apiLimitCount:number,
+}
+const Sidebar = ({apiLimitCount=0}:SidebarProps) => {
   // this usepathname will return the STRING of the current path we are standing at ie->/dashboard
   const pathname=usePathname()
   return (
@@ -90,7 +92,7 @@ const Sidebar = () => {
               })}
             </div>
             {/* free counter  */}
-            <FreeCounter/>
+            <FreeCounter apiLimitCount={apiLimitCount}/>
           </div>
     </div>
   )
