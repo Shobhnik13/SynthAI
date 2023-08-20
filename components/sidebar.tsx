@@ -1,6 +1,7 @@
 'use client'
 // this use client will create a boundary between server and client comp module graph 
 import { Montserrat } from "next/font/google"
+import FreeCounter from "./free-counter"
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "../lib/utils"
@@ -50,13 +51,14 @@ const routes=[
     href:'/settings',
   },
 ]
+
 const Sidebar = () => {
   // this usepathname will return the STRING of the current path we are standing at ie->/dashboard
   const pathname=usePathname()
   return (
     // div for full sidebar thing 
     <div className="space-y-4 flex flex-col h-full bg-[#111827] text-white">
-        {/* div for logo and name and routes map  */}
+        {/* div for logo and name and routes map and free counter   */}
           <div className="px-3 py-2 flex-1">
 
             {/* link for name and logo  */}
@@ -87,6 +89,8 @@ const Sidebar = () => {
                 )
               })}
             </div>
+            {/* free counter  */}
+            <FreeCounter/>
           </div>
     </div>
   )

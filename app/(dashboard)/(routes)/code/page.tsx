@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import * as z from "zod"
 import { formSchema } from "./code"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { cn } from "../../../../lib/utils"
 import { Input } from "../../../../components/ui/input"
 import axios from 'axios'
 import { Button } from "../../../../components/ui/button"
@@ -14,7 +15,6 @@ import { useState } from "react"
 import { ChatCompletionRequestMessage } from "openai"
 import Empty from "../../../../components/ui/empty"
 import LoaderComp from "../../../../components/ui/loadercomp"
-import { cn } from "../../../../lib/utils"
 import UserAva from "../../../../components/ui/user-ava"
 import BotAva from "../../../../components/ui/bot-ava"
 import ReactMarkdown from 'react-markdown'

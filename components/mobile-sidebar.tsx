@@ -19,7 +19,7 @@ const MobileSidebar = () => {
     if(!isMounted){
     return null;        
     }
-
+    
   return (
         <Sheet>
             {/* button contains toggle icon ->visible only in mobiles  */}
@@ -31,7 +31,7 @@ const MobileSidebar = () => {
                 </Button>
             </SheetTrigger>
                 {/* sheet content to render sidebar  */}
-                <SheetContent className="p-0" side="left" ><Sidebar/></SheetContent>
+                <SheetContent className="p-0" side="left" ><Sidebar /></SheetContent>
         </Sheet>
   )
 }
