@@ -92,7 +92,9 @@ const Sidebar = ({apiLimitCount=0}:SidebarProps) => {
               })}
             </div>
             {/* free counter  */}
-            <FreeCounter apiLimitCount={apiLimitCount}/>
+              <div className="mt-14">
+            <FreeCounter  apiLimitCount={apiLimitCount}/>
+            </div>
           </div>
     </div>
   )

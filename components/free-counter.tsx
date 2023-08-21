@@ -1,6 +1,11 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import { Card, CardContent } from "./ui/card"
+import { FREE_TIER_COUNT } from "../app/constants/constants"
+import { Progress } from "./ui/progress"
+import { Button } from "./ui/button"
+import { Zap } from "lucide-react"
 
 interface FreeCounterProps{
   apiLimitCount:number
@@ -19,7 +24,17 @@ const FreeCounter = ({apiLimitCount=0}:FreeCounterProps) => {
     return null;
   }
   return (
-    <div>free-counter</div>
+    <div className="px-3">
+      <Card className="bg-white/10 border-0">
+        <CardContent className="py-6 ">
+          <div className="text-center text-sm text-white mb-2 space-y-2">
+            <p>{apiLimitCount} / {FREE_TIER_COUNT} Free Generations</p>
+            <Progress className="h-3 " value={(apiLimitCount/FREE_TIER_COUNT)*100}/>
+          </div>
+          <Button variant="premium" className="w-full hover:scale-90 duration-200 ease-in-out">Upgrade <Zap className="w-4 h-4 ml-2 fill-black "/></Button>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
