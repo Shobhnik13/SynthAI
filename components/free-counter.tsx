@@ -6,11 +6,13 @@ import { FREE_TIER_COUNT } from "../app/constants/constants"
 import { Progress } from "./ui/progress"
 import { Button } from "./ui/button"
 import { Zap } from "lucide-react"
+import { useProModal } from "../hooks/pro-modal"
 
 interface FreeCounterProps{
   apiLimitCount:number
 }
 const FreeCounter = ({apiLimitCount=0}:FreeCounterProps) => {
+  const proModalStates=useProModal()
   // s1 
   const [mounted,setMounted]=useState(false)
   
@@ -31,7 +33,7 @@ const FreeCounter = ({apiLimitCount=0}:FreeCounterProps) => {
             <p>{apiLimitCount} / {FREE_TIER_COUNT} Free Generations</p>
             <Progress className="h-3 " value={(apiLimitCount/FREE_TIER_COUNT)*100}/>
           </div>
-          <Button variant="premium" className="w-full hover:scale-90 duration-200 ease-in-out">Upgrade <Zap className="w-4 h-4 ml-2 fill-black "/></Button>
+          <Button variant="premium" onClick={proModalStates.onOpen} className="w-full hover:scale-90 duration-200 ease-in-out">Upgrade <Zap className="w-4 h-4 ml-2 fill-black "/></Button>
         </CardContent>
       </Card>
     </div>
