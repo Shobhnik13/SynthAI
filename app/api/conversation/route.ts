@@ -24,6 +24,8 @@ export async function POST(req:Request){
             if(!messages){
                     return new NextResponse('Messages are required!',{status:400})
             }
+            
+            //check free trial is true or not before performing computation
             const freeTrial=await checkApiLimit()
             if(!freeTrial){
                 return new NextResponse('Your free trial is expired!',{status:403})
@@ -33,6 +35,8 @@ export async function POST(req:Request){
                 model: "gpt-3.5-turbo",
                 messages,
             });
+            //after computation
+            //inc api limit
             await incApiLimit()
             return NextResponse.json(res.data.choices[0].message)
     }catch(error){

@@ -22,9 +22,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "../../../../co
 import { SelectValue } from "@radix-ui/react-select"
 import { Card, CardFooter } from "../../../../components/ui/card"
 import Image from "next/image"
+import { useProModal } from "../../../../hooks/pro-modal"
 
 const ImagePage = () => {
- 
+  const proModalStates=useProModal()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,7 +51,10 @@ const ImagePage = () => {
       setImages(links)
      form.reset()
     }catch(error: any){
-        console.log(error)
+        if(error?.response?.status==403)
+        {
+          proModalStates.onOpen()
+        }
     }finally{
         router.refresh()
     }

@@ -17,9 +17,10 @@ import LoaderComp from "../../../../components/ui/loadercomp"
 import { cn } from "../../../../lib/utils"
 import UserAva from "../../../../components/ui/user-ava"
 import BotAva from "../../../../components/ui/bot-ava"
+import { useProModal } from "../../../../hooks/pro-modal"
 
 const ConversationPage = () => {
- 
+  const proModalStates=useProModal()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,6 +53,10 @@ const ConversationPage = () => {
       //resetting the form
       form.reset()
     }catch(error: any){
+      if(error?.response?.status===403){
+        
+        proModalStates.onOpen()
+      }
         console.log(error)
     }finally{
         router.refresh()

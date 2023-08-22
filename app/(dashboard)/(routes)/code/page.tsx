@@ -18,8 +18,9 @@ import LoaderComp from "../../../../components/ui/loadercomp"
 import UserAva from "../../../../components/ui/user-ava"
 import BotAva from "../../../../components/ui/bot-ava"
 import ReactMarkdown from 'react-markdown'
+import { useProModal } from "../../../../hooks/pro-modal"
 const CodePage = () => {
- 
+  const proModalStates=useProModal()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,7 +53,10 @@ const CodePage = () => {
       //resetting the form
       form.reset()
     }catch(error: any){
-        console.log(error)
+      if(error?.response?.status==403){
+        proModalStates.onOpen()
+      }
+        // console.log(error)
     }finally{
         router.refresh()
     }
