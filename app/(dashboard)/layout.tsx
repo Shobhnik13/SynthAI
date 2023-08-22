@@ -13,7 +13,7 @@ import { getApiLimit } from "../constants/api-limit"
         <div className="h-full relative">
 
             {/* side bar only visible in laps initially -> comp1 of page  */}
-            <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed  md:inset-y-0 z-[99] bg-gray-900">
+            <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed  md:inset-y-0  bg-gray-900">
                 <Sidebar apiLimitCount={apiLimitCount}/>
             </div>
             {/* content far from side bar -> comp 2 of page  */}

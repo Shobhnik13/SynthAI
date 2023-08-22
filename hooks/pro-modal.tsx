@@ -5,7 +5,7 @@ interface proModalStore {
     onClose:()=>void
   }
 
-  const useProModal = create<proModalStore>((set)=>({
+  export const useProModal = create<proModalStore>((set)=>({
         isOpen:false,
         onOpen:()=>set({isOpen:true}),
         onClose:()=>set({isOpen:false})
