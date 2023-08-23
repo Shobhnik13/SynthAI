@@ -30,9 +30,10 @@ const LandingNavbar = () => {
         </Link>
 
         {/* right div -> buttons */}
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-2 relative ">
             <Link href={isSignedIn?'/dashboard':'/sign-up'}>
-                <Button variant="outline" className="rounded-full text-lg hover:scale-90 duration-90 transition-all" >Get Started</Button>
+                <Button variant="outline" className=" rounded-full text-lg hover:scale-90 duration-90 transition-all" >Get Started</Button>
+                <span className=" animate-ping -left-4 -top-4 relative inline-flex rounded-full h-3 w-3 bg-sky-500 duration-1000"></span>
             </Link>
         </div>
     </nav>
