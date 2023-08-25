@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Card } from "./ui/card"
 import { cn } from "../lib/utils"
 import { Button } from "./ui/button"
+import axios from "axios"
+import { useState } from "react"
 const tools=[
     {
       label:'Conversation',
@@ -47,6 +49,19 @@ const tools=[
   ]
 const ProModalUi = () => {
     const proStoreStates=useProModal()
+    const [loading,setLoading]=useState(false)
+    const onSub=async()=>{
+        try{
+          setLoading(true)
+            const res=await axios.get('/api/stripe')
+            // window.location.href will locate to the desired url ie setting page that is coming as a response from api
+            window.location.href=res.data.url
+        }catch(error){
+          console.log(error,'stripe client error')
+        }finally{
+          setLoading(false)
+        }
+    }
   return (
    <Dialog open={proStoreStates.isOpen} onOpenChange={proStoreStates.onClose}>
       <DialogContent>
@@ -91,7 +106,7 @@ const ProModalUi = () => {
             </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="premium" className="text-white w-full" size="lg">
+          <Button onClick={onSub} variant="premium" className="text-white w-full" size="lg">
             Upgrade
             <Zap className="fill-white w-4 h-4 ml-2 border-none"/>
           </Button>
