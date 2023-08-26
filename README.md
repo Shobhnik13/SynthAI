@@ -10,6 +10,7 @@ Libraries used:
 ・Zustand for state management.
 ・Prisma ,sql, planet scale used for writing the queries of the database and hosting the database respectively.
 ・For a seamless payment experience Stripe payment gateway is used.
+・Crisp chat for providing a great customer support experience.
 
 Test stripe card for fake payments:
 ・Card no: 4242 4242 4242 4242
