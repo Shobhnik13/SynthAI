@@ -28,7 +28,7 @@ const LandingHero = () => {
             </div>
         <h2 className="text-sm md:text-2xl font-light text-gray-500 ">AI-Powered Excellence, Delivered as a Service.</h2>
         <Link href={isSignedIn?'/dashboard':'/sign-up'}>
-            <Button  className="animate-bounce  bg-gradient-to-r from-indigo-400 via-purple-600 to-pink-600 md:text-lg p-4 md:p-6 mt-4 duration-150 transition-all rounded-full font-semibold">Start Exploring!</Button>
+            <Button  className="animate-bounce  bg-gradient-to-r from-indigo-400 via-purple-600 to-pink-600 md:text-lg p-4 md:p-6 mt-4 duration-1000 transition-all rounded-full font-semibold">Start Exploring!</Button>
         </Link>
         <div className="text-zinc-400 text-xs md:text-sm font-normal">
             Ready to Dive into AI? No Credit Card, No Stress.
