@@ -9,6 +9,8 @@ import { cn } from "../lib/utils"
 import { Button } from "./ui/button"
 import axios from "axios"
 import { useState } from "react"
+import {toast} from 'react-hot-toast'
+
 const tools=[
     {
       label:'Conversation',
@@ -45,20 +47,21 @@ const tools=[
       bgColor:'bg-violet-700/10',
       href:'/code'
     },
-  
+    
   ]
-const ProModalUi = () => {
+  const ProModalUi = () => {
     const proStoreStates=useProModal()
     const [loading,setLoading]=useState(false)
     const onSub=async()=>{
-        try{
-          setLoading(true)
-            const res=await axios.get('/api/stripe')
-            // window.location.href will locate to the desired url ie setting page that is coming as a response from api
-            window.location.href=res.data.url
-        }catch(error){
-          console.log(error,'stripe client error')
-        }finally{
+      try{
+        setLoading(true)
+        const res=await axios.get('/api/stripe')
+        // window.location.href will locate to the desired url ie setting page that is coming as a response from api
+        window.location.href=res.data.url
+      }catch(error){
+        // console.log(error,'stripe client error')
+          toast.error('Something went wrong!')
+      }finally{
           setLoading(false)
         }
     }

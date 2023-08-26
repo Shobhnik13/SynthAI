@@ -23,6 +23,7 @@ import { SelectValue } from "@radix-ui/react-select"
 import { Card, CardFooter } from "../../../../components/ui/card"
 import Image from "next/image"
 import { useProModal } from "../../../../hooks/pro-modal"
+import {toast} from 'react-hot-toast'
 
 const ImagePage = () => {
   const proModalStates=useProModal()
@@ -49,14 +50,17 @@ const ImagePage = () => {
       // console.log(res.data);
       const links=res.data.map((image:{url:string})=>image.url)
       setImages(links)
-     form.reset()
+      form.reset()
     }catch(error: any){
-        if(error?.response?.status==403)
-        {
-          proModalStates.onOpen()
-        }
+      if(error?.response?.status==403)
+      {
+        proModalStates.onOpen()
+      }
+      else{
+        toast.error('Something went wrong!')
+      }
     }finally{
-        router.refresh()
+      router.refresh()
     }
   }
   return (

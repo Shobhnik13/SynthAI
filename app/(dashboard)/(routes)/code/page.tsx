@@ -19,6 +19,8 @@ import UserAva from "../../../../components/ui/user-ava"
 import BotAva from "../../../../components/ui/bot-ava"
 import ReactMarkdown from 'react-markdown'
 import { useProModal } from "../../../../hooks/pro-modal"
+import {toast} from 'react-hot-toast'
+
 const CodePage = () => {
   const proModalStates=useProModal()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,6 +57,9 @@ const CodePage = () => {
     }catch(error: any){
       if(error?.response?.status==403){
         proModalStates.onOpen()
+      }
+      else{
+        toast.error('Something went wrong!')
       }
         // console.log(error)
     }finally{

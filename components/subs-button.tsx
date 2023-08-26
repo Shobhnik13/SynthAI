@@ -4,6 +4,9 @@ import { Zap } from "lucide-react"
 import { Button } from "./ui/button"
 import axios from "axios"
 import { useState } from "react"
+import {toast} from 'react-hot-toast'
+
+
 
 interface SubsButtonProps{
     isPro:boolean,
@@ -16,7 +19,8 @@ const SubsButton = ({isPro=false}:SubsButtonProps) => {
             const res=await axios.get('/api/stripe')
             window.location.href=res.data.url
         }catch(error){
-            console.log('BILLING ERROR:',error)
+            toast.error('Something went wrong!')
+            // console.log('BILLING ERROR:',error)
         }finally{
             setLoading(false)
         }
