@@ -9,9 +9,10 @@ import { Zap } from "lucide-react"
 import { useProModal } from "../hooks/pro-modal"
 
 interface FreeCounterProps{
-  apiLimitCount:number
+  apiLimitCount:number,
+  isPro:boolean
 }
-const FreeCounter = ({apiLimitCount=0}:FreeCounterProps) => {
+const FreeCounter = ({apiLimitCount=0,isPro=false}:FreeCounterProps) => {
   const proModalStates=useProModal()
   // s1 
   const [mounted,setMounted]=useState(false)
@@ -23,6 +24,10 @@ const FreeCounter = ({apiLimitCount=0}:FreeCounterProps) => {
 
   // s3 
   if(!mounted){
+    return null;
+  }
+  //is already a pro then dont show counter
+  if(isPro){
     return null;
   }
   return (

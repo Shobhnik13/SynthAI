@@ -37,12 +37,12 @@ export async function GET(){
             customer_email:user.emailAddresses[0].emailAddress,
             line_items: [{
                 price_data: {
-                  currency: 'usd',
+                  currency: 'inr',
                   product_data:{
                     name:'SynthAI pro',
                     description:'Unlimited AI generations'
                   },
-                unit_amount: 3900,
+                unit_amount: 39000,
                 recurring:{
                     interval:'month'
                 }

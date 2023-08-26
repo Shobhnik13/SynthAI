@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import  { Configuration, OpenAIApi } from "openai" ;
 import { checkApiLimit, incApiLimit } from "../../constants/api-limit";
+import { checkSubs } from "../../../lib/subscription";
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
@@ -10,6 +11,7 @@ const openai = new OpenAIApi(configuration);
 export async function POST(req:Request){
     try{
         const {userId}=auth()
+        const isPro=await checkSubs()
         const body=await req.json()
         const { messages }=body
             // checking user presence -> auth required
@@ -27,7 +29,7 @@ export async function POST(req:Request){
             
             //check free trial is true or not before performing computation
             const freeTrial=await checkApiLimit()
-            if(!freeTrial){
+            if(!freeTrial && !isPro){
                 return new NextResponse('Your free trial is expired!',{status:403})
             }
             //  returning response 
@@ -37,7 +39,9 @@ export async function POST(req:Request){
             });
             //after computation
             //inc api limit
-            await incApiLimit()
+            if(!isPro){
+                await incApiLimit()
+            }
             return NextResponse.json(res.data.choices[0].message)
     }catch(error){
         console.log('Conversation error!',error)

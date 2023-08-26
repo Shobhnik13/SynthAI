@@ -52,9 +52,9 @@ const routes=[
   },
 ]
 interface SidebarProps{
-  apiLimitCount:number,
+  apiLimitCount:number,isPro:boolean
 }
-const Sidebar = ({apiLimitCount=0}:SidebarProps) => {
+const Sidebar = ({apiLimitCount=0,isPro=false}:SidebarProps) => {
   // this usepathname will return the STRING of the current path we are standing at ie->/dashboard
   const pathname=usePathname()
   return (
@@ -93,7 +93,7 @@ const Sidebar = ({apiLimitCount=0}:SidebarProps) => {
             </div>
             {/* free counter  */}
               <div className="mt-14">
-            <FreeCounter  apiLimitCount={apiLimitCount}/>
+            <FreeCounter isPro={isPro} apiLimitCount={apiLimitCount}/>
             </div>
           </div>
     </div>

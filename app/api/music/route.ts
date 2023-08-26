@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 import { checkApiLimit, incApiLimit } from "../../constants/api-limit";
+import { checkSubs } from "../../../lib/subscription";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -12,6 +13,7 @@ export async function POST(req:Request){
         const {userId}=auth()
         const body=await req.json()
         const { prompt }=body
+        const isPro=await checkSubs()
             // checking user presence -> auth required
             if(!userId){
                 return new NextResponse('Unauthorized!' , {status:401})
@@ -22,7 +24,7 @@ export async function POST(req:Request){
                 return new NextResponse('prompt is required',{status:400})
             }
             const freeTrial=await checkApiLimit()
-            if(!freeTrial){
+            if(!freeTrial && !isPro){
                 return new NextResponse('Your free trial is expired!',{status:403})
             }
             // returning response
@@ -35,7 +37,9 @@ export async function POST(req:Request){
                 }
               }
               );
-              await incApiLimit()
+              if(!isPro){
+                await incApiLimit()
+              }
               return NextResponse.json(res)
     }catch(error){
         console.log('Music error!',error)

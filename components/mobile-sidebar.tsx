@@ -1,12 +1,15 @@
 'use client'
-
+interface MobileSidebarProps{
+    apiLimitCount:number,
+    isPro:boolean,
+}
 import { Menu } from "lucide-react"
 import { Button } from "./ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import Sidebar from "./sidebar"
 import { useEffect, useState } from "react"
 
-const MobileSidebar = () => {
+const MobileSidebar = ({apiLimitCount=0,isPro=false}:MobileSidebarProps) => {
 //    3 step process to fix components having hydration error 
 
 // step-1 -> make the mounted state as false 
@@ -31,7 +34,7 @@ const MobileSidebar = () => {
                 </Button>
             </SheetTrigger>
                 {/* sheet content to render sidebar  */}
-                {/* <SheetContent className="p-0" side="left" ><Sidebar apiLimitCount={} /></SheetContent> */}
+                <SheetContent className="p-0" side="left" ><Sidebar apiLimitCount={apiLimitCount} isPro={isPro} /></SheetContent>
         </Sheet>
   )
 }

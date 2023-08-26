@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import  { Configuration, OpenAIApi } from "openai" ;
 import { checkApiLimit, incApiLimit } from "../../constants/api-limit";
+import { checkSubs } from "../../../lib/subscription";
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
@@ -10,6 +11,7 @@ export async function POST(req:Request){
     try{
         const {userId}=auth()
         const body=await req.json()
+        const isPro=await checkSubs()
         const { prompt,amount=1,resolution="512x512" }=body
             // checking user presence -> auth required
             if(!userId){
@@ -31,7 +33,7 @@ export async function POST(req:Request){
                 return new NextResponse('resolution is required',{status:400})
             }
             const freeTrial=await checkApiLimit()
-            if(!freeTrial){
+            if(!freeTrial && !isPro){
                 return new NextResponse('Your free trial is expired!',{status:403})
             }
             
@@ -42,7 +44,9 @@ export async function POST(req:Request){
                 n:parseInt(amount,10),
                 size:resolution,
             });
-            await incApiLimit()
+            if(!isPro){
+                await incApiLimit()
+            }
             return NextResponse.json(res.data.data)
     }catch(error){
         console.log('Image error!',error)
