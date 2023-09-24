@@ -9,7 +9,6 @@ datasource db {
   url = env("DATABASE_URL")
   relationMode = "prisma"
 }
-
 model userApiLimit{
   // cuid generates a automatic global id for horizontal scaling 
   id String  @id @default(cuid())
