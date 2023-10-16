@@ -19,6 +19,7 @@ export async function GET(){
                 userId
             }
         })
+        
         //user already subs then show the billing page and cancel
         if(userSubs && userSubs.stripeCustomerId){
             const stripeSession = await stripe.billingPortal.sessions.create({
