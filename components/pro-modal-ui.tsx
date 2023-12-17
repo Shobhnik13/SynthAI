@@ -52,6 +52,7 @@ const tools=[
   const ProModalUi = () => {
     const proStoreStates=useProModal()
     const [loading,setLoading]=useState(false)
+    
     const onSub=async()=>{
       try{
         setLoading(true)
