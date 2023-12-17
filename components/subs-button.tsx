@@ -10,7 +10,8 @@ import {toast} from 'react-hot-toast'
 
 interface SubsButtonProps{
     isPro:boolean,
-}
+} 
+
 const SubsButton = ({isPro=false}:SubsButtonProps) => {
     const [loading,setLoading]=useState(false)
     const onClick=async()=>{
